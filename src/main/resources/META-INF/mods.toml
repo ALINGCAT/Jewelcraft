@@ -4,11 +4,11 @@ license="MIT License"
 
 [[mods]]
 modId="jewelcraft"
-version="1.6.2"
+version="1.7.0"
 displayName="Jewelcraft"
-credits="Jusey1, Burack"
 displayURL="https://discord.gg/s7QaYGUzZU"
 logoFile="logo.png"
+credits="Jusey1, Burack"
 authors="Jusey1"
 description="Craft & enchant your own jewelry..."
 
