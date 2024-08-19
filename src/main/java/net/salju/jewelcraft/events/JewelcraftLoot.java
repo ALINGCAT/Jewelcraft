@@ -3,12 +3,10 @@ package net.salju.jewelcraft.events;
 import net.salju.jewelcraft.init.JewelryItems;
 import net.salju.jewelcraft.init.JewelryEnchantments;
 import net.salju.jewelcraft.init.JewelryConfig;
-
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
-
-import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
@@ -27,18 +25,13 @@ public class JewelcraftLoot {
 			} else if (event.getName().equals(BuiltInLootTables.JUNGLE_TEMPLE)) {
 				LootTable table = event.getTable();
 				LootPool unique = JewelcraftManager.setUnique("jungle_loot", -2.0F, 1.0F,
-						JewelcraftManager.getUnique(JewelryItems.COPPER_RING_ROSE.get(), "item.jewelcraft.sacrifice_ring", JewelryEnchantments.BLOODY.get(), JewelryEnchantments.ZOMBIE.get()));
+						JewelcraftManager.getUnique(JewelryItems.COPPER_RING_ROSE.get(), "item.jewelcraft.sacrifice_ring", JewelryEnchantments.BLOODY.get(), JewelryEnchantments.INFUSED.get()));
 				table.addPool(unique);
 				event.setTable(table);
 			} else if (event.getName().equals(BuiltInLootTables.DESERT_PYRAMID)) {
 				LootTable table = event.getTable();
 				LootPool unique = JewelcraftManager.setUnique("desert_loot", -2.0F, 1.0F,
 						JewelcraftManager.getUnique(JewelryItems.GOLDEN_AMULET_REDSTONE.get(), "item.jewelcraft.desert_amulet", JewelryEnchantments.SATISFICATION.get(), JewelryEnchantments.MAGNETIC.get()));
-				table.addPool(unique);
-				event.setTable(table);
-			} else if (event.getName().equals(BuiltInLootTables.STRONGHOLD_LIBRARY)) {
-				LootTable table = event.getTable();
-				LootPool unique = JewelcraftManager.setUnique("stronghold_loot", -2.0F, 1.0F, JewelcraftManager.getUnique(JewelryItems.IRON_RING_LAPIS.get(), "item.jewelcraft.kyan_ring", JewelryEnchantments.KYANITE.get(), null));
 				table.addPool(unique);
 				event.setTable(table);
 			} else if (event.getName().equals(BuiltInLootTables.FISHING_TREASURE)) {
@@ -50,12 +43,6 @@ public class JewelcraftLoot {
 			} else if (event.getName().equals(BuiltInLootTables.SPAWN_BONUS_CHEST)) {
 				LootTable table = event.getTable();
 				LootPool unique = JewelcraftManager.setUnique("spawnbonus_loot", 1.0F, 1.0F, JewelcraftManager.getUnique(JewelryItems.IRON_AMULET_EMERALD.get(), "item.jewelcraft.bonus_amulet", JewelryEnchantments.SATISFICATION.get(), null));
-				table.addPool(unique);
-				event.setTable(table);
-			} else if (JewelcraftManager.getVillages().contains(event.getName())) {
-				LootTable table = event.getTable();
-				LootPool unique = JewelcraftManager.setUnique("villager_loot", -3.0F, 1.0F,
-						JewelcraftManager.getUnique(JewelryItems.GOLDEN_AMULET_EMERALD.get(), "item.jewelcraft.villager_amulet", JewelryEnchantments.ZILLYAURA.get(), JewelryEnchantments.SODALITE.get()));
 				table.addPool(unique);
 				event.setTable(table);
 			}

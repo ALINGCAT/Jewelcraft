@@ -3,83 +3,39 @@ package net.salju.jewelcraft.events;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.CuriosApi;
-
-import net.salju.jewelcraft.item.RingItem;
+import net.salju.jewelcraft.item.RingItem;
 import net.salju.jewelcraft.item.AmuletItem;
 import net.salju.jewelcraft.init.JewelryEnchantments;
 import net.salju.jewelcraft.init.JewelryConfig;
-
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.BoneMealItem;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.util.Mth;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.core.BlockPos;
-
-import javax.annotation.Nullable;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.ArrayList;
 
 @Mod.EventBusSubscriber
 public class JewelcraftEvents {
-	@SubscribeEvent
-	public static void onEntityAttacked(LivingAttackEvent event) {
-		if (event != null && event.getEntity() != null) {
-			if (event.getEntity() instanceof Player player) {
-				ItemStack amulet = getAmulet(player);
-				if (!player.level().isClientSide) {
-					if (amulet != null) {
-						if (JewelcraftManager.hasEnchantment(JewelryEnchantments.DEFLECT.get(), amulet) && event.getSource().getDirectEntity() != null) {
-							if (event.getSource().getDirectEntity() instanceof Arrow arrow && !(player.isBlocking())) {
-								boolean check = (arrow.getOwner() instanceof Player);
-								int i = Mth.nextInt(player.getRandom(), 1, 100);
-								if ((check && i <= JewelryConfig.PVP.get()) || (!check && i <= JewelryConfig.PVE.get())) {
-									event.setCanceled(true);
-									float x = (Mth.nextFloat(player.getRandom(), 175.0F, 185.0F));
-									float y = (Mth.nextFloat(player.getRandom(), -8.0F, 8.0F));
-									Arrow newbie = new Arrow(player.level(), player);
-									newbie.setCritArrow(true);
-									newbie.shootFromRotation(player, (arrow.getOwner().getXRot() - x), (arrow.getOwner().getYRot() + y), 0.0F, 0.65F * 3.0F, 1.0F);
-									player.level().addFreshEntity(newbie);
-									arrow.discard();
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
 	@SubscribeEvent
 	public static void onDeath(LivingDeathEvent event) {
 		if (event != null && event.getEntity() != null && event.getSource() != null) {
@@ -97,81 +53,6 @@ public class JewelcraftEvents {
 						player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 800, 0));
 						player.level().broadcastEntityEvent(player, (byte) 35);
 						event.setCanceled(true);
-					} else if (rings.size() > 0) {
-						for (ItemStack ring : rings) {
-							if (JewelcraftManager.hasEnchantment(JewelryEnchantments.TOTEM.get(), ring)) {
-								player.getInventory().clearOrCountMatchingItems(p -> totem.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
-								player.setHealth(1.0F);
-								player.removeAllEffects();
-								player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
-								player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 0));
-								player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 600, 0));
-								player.level().broadcastEntityEvent(player, (byte) 35);
-								event.setCanceled(true);
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	@SubscribeEvent
-	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-		if (event != null && event.getEntity() != null && event.getItemStack() != null) {
-			Player player = event.getEntity();
-			ItemStack book = event.getItemStack();
-			ItemStack item = null;
-			List<ItemStack> rings = getRings(player);
-			if (book.getItem() == Items.BOOK) {
-				if (player.getMainHandItem() == book) {
-					item = player.getOffhandItem();
-				} else {
-					item = player.getMainHandItem();
-				}
-				if (rings.size() > 0 && item.isEnchanted()) {
-					for (ItemStack ring : rings) {
-						if (JewelcraftManager.hasEnchantment(JewelryEnchantments.KYANITE.get(), ring)) {
-							if (player.experienceLevel > 5 || player.isCreative()) {
-								if (!player.isCreative()) {
-									player.giveExperienceLevels(-5);
-								}
-								player.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
-								ItemStack newbie = new ItemStack(Items.ENCHANTED_BOOK);
-								EnchantmentHelper.setEnchantments(EnchantmentHelper.getEnchantments(item), newbie);
-								player.playSound(SoundEvents.ITEM_BREAK, 1.0F, 1.0F);
-								ItemHandlerHelper.giveItemToPlayer(player, newbie);
-								item.shrink(1);
-								book.shrink(1);
-							} else {
-								player.displayClientMessage(Component.translatable("desc.jewelcraft.kyanite_xp"), (true));
-							}
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	@SubscribeEvent
-	public static void onBlock(ShieldBlockEvent event) {
-		if (event != null && event.getEntity() != null && event.getDamageSource().getDirectEntity() != null) {
-			if (event.getEntity() instanceof Player player) {
-				List<ItemStack> rings = getRings(player);
-				if (rings.size() > 0) {
-					for (ItemStack ring : rings) {
-						if (JewelcraftManager.hasEnchantment(JewelryEnchantments.ZOMBIE.get(), ring)) {
-							if (event.getDamageSource().getDirectEntity() instanceof LivingEntity bob && !(bob instanceof Zombie)) {
-								for (Zombie billy : player.level().getEntitiesOfClass(Zombie.class, player.getBoundingBox().inflate(32.0D))) {
-									if (bob.isAlive() && !(billy instanceof ZombifiedPiglin)) {
-										billy.setTarget(bob);
-									}
-								}
-								break;
-							}
-						}
 					}
 				}
 			}

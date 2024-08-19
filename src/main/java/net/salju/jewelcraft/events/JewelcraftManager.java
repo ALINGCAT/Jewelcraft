@@ -7,17 +7,12 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 
 public class JewelcraftManager {
 	public static LootPoolSingletonContainer.Builder<?> getUnique(Item gem, @Nullable String name, Enchantment one, @Nullable Enchantment two) {
@@ -52,18 +47,5 @@ public class JewelcraftManager {
 		}
 		LootPool done = newbie.build();
 		return done;
-	}
-
-	public static List<ResourceLocation> getVillages() {
-		List<ResourceLocation> village = new ArrayList<ResourceLocation>();
-		village.add(BuiltInLootTables.VILLAGE_TOOLSMITH);
-		village.add(BuiltInLootTables.VILLAGE_CARTOGRAPHER);
-		village.add(BuiltInLootTables.VILLAGE_TEMPLE);
-		village.add(BuiltInLootTables.VILLAGE_DESERT_HOUSE);
-		village.add(BuiltInLootTables.VILLAGE_PLAINS_HOUSE);
-		village.add(BuiltInLootTables.VILLAGE_TAIGA_HOUSE);
-		village.add(BuiltInLootTables.VILLAGE_SNOWY_HOUSE);
-		village.add(BuiltInLootTables.VILLAGE_SAVANNA_HOUSE);
-		return village;
 	}
 }

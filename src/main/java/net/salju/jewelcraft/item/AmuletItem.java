@@ -10,15 +10,11 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.tags.FluidTags;
 import java.util.UUID;
@@ -35,16 +31,16 @@ public class AmuletItem extends JewelryItem {
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slot, UUID id, ItemStack stack) {
 		LivingEntity target = slot.entity();
 		Multimap<Attribute, AttributeModifier> stats = HashMultimap.create();
-		if (isCopper(stack)) {
+		if (isCopper(stack)) {
 			stats.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(UUID.fromString("929c9214-b9f9-11ed-afa1-0242ac120002"), "S-KB-A", JewelryConfig.COPPER.get(), AttributeModifier.Operation.ADDITION));
 		}
-		if (isIron(stack)) {
+		if (isIron(stack)) {
 			stats.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString("5a1035e8-b7f8-11ed-afa1-0242ac120002"), "S-Armor-A", JewelryConfig.IRON.get(), AttributeModifier.Operation.ADDITION));
 		}
-		if (JewelcraftManager.hasEnchantment(JewelryEnchantments.HELIODOR.get(), stack)) {
+		if (JewelcraftManager.hasEnchantment(JewelryEnchantments.HELIODOR.get(), stack)) {
 			stats.put(Attributes.LUCK, new AttributeModifier(UUID.fromString("1f7c25ec-b9f9-11ed-afa1-0242ac120002"), "S-Luck-A", JewelryConfig.LUCK.get(), AttributeModifier.Operation.ADDITION));
 		}
-		if (JewelcraftManager.hasEnchantment(JewelryEnchantments.AQUAMARINE.get(), stack)) {
+		if (JewelcraftManager.hasEnchantment(JewelryEnchantments.AQUAMARINE.get(), stack)) {
 			stats.put(ForgeMod.SWIM_SPEED.get(), new AttributeModifier(UUID.fromString("f7be8916-b85c-11ed-afa1-0242ac120002"), "S-Swim-A", ((float) JewelryConfig.SWMSPD.get() / 100), AttributeModifier.Operation.MULTIPLY_TOTAL));
 		}
 		if (JewelcraftManager.hasEnchantment(JewelryEnchantments.ALEXANDRITE.get(), stack)) {
@@ -62,7 +58,7 @@ public class AmuletItem extends JewelryItem {
 		if (slot.entity() instanceof Player player) {
 			if (JewelcraftManager.hasEnchantment(JewelryEnchantments.MAGNETIC.get(), stack)) {
 				List<ItemEntity> items = player.level().getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(JewelryConfig.MAGN.get()));
-				for (ItemEntity item : items) {
+				for (ItemEntity item : items) {
 					if (item.isAlive() && player.isShiftKeyDown() && check(player, item.getItem())) {
 						item.setNoPickUpDelay();
 						item.setNoGravity(true);
@@ -87,15 +83,6 @@ public class AmuletItem extends JewelryItem {
 						player.setAirSupply(player.getAirSupply() + 1);
 					} else {
 						player.setAirSupply(300);
-					}
-				}
-			}
-			if (JewelcraftManager.hasEnchantment(JewelryEnchantments.ZILLYAURA.get(), stack)) {
-				for (LivingEntity aura : player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(7.0D))) {
-					if (aura instanceof Animal || aura instanceof Villager) {
-						if (!aura.hasEffect(MobEffects.REGENERATION) && aura.getHealth() < aura.getMaxHealth()) {
-							aura.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 1));
-						}
 					}
 				}
 			}

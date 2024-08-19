@@ -1,8 +1,7 @@
 package net.salju.jewelcraft.enchantment;
 
 import net.salju.jewelcraft.item.RingItem;
-
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,7 +16,7 @@ public class RingEnchantment extends Enchantment {
 
 	@Override
 	protected boolean checkCompatibility(Enchantment ench) {
-		return (!(ench instanceof RingEnchantment));
+		return (ench instanceof RingEnchantment ? false : super.checkCompatibility(ench));
 	}
 
 	@Override

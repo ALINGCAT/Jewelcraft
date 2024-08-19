@@ -21,8 +21,6 @@ public class JewelryConfig {
 	public static final ForgeConfigSpec.IntValue LOOT;
 
 	public static final ForgeConfigSpec.DoubleValue MAGN;
-	public static final ForgeConfigSpec.IntValue PVE;
-	public static final ForgeConfigSpec.IntValue PVP;
 	public static final ForgeConfigSpec.IntValue FOOD;
 	public static final ForgeConfigSpec.IntValue CRIT;
 	public static final ForgeConfigSpec.IntValue CRITRNG;
@@ -49,8 +47,6 @@ public class JewelryConfig {
 		BUILDER.pop();
 		BUILDER.push("Enchantment Abilities");
 		MAGN = BUILDER.comment("Magnetic's range for teleporting items to the player").defineInRange("Magnetic", 16.0, 0.0, Double.MAX_VALUE);
-		PVE = BUILDER.comment("Deflect's chance against mobs as a percentage").defineInRange("PvE", 65, 0, 100);
-		PVP = BUILDER.comment("Deflect's chance against players as a percentage").defineInRange("PvP", 20, 0, 100);
 		FOOD = BUILDER.comment("Satisfication's minimum hunger amount for the player").defineInRange("Never Go Hungry", 12, 0, 16);
 		CRIT = BUILDER.comment("Empowered's Vanilla Critical Damage Bonus as a percentage").defineInRange("Critical", 25, 0, Integer.MAX_VALUE);
 		CRITRNG = BUILDER.comment("Empowered's Random Critical Damage Bonus as a percentage").defineInRange("Random Critical", 25, 0, Integer.MAX_VALUE);
